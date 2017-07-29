@@ -58,6 +58,16 @@ def extract_text(filename):
         return process(filename)
         
     return None
+
+def extract_file_text(url):
+    file = download_file(url)
+    try:
+        extracted_text = extract_text(file).decode('unicode-escape').encode('ascii', 'ignore')
+    except UnicodeDecodeError:
+        print "Error while decoding text..."
+
+    words = TextBlob(extracted_text).words
+    return ' '.join(words)
     
 class TypeformX:
     def __init__(self, api_key, complete=False):
@@ -116,7 +126,7 @@ class TypeformX:
                     
         return file_upload_links
 
-    def extract_cv_text(self, typeform_id):
+    def get_email_file_text(self, typeform_id):
         extracted_data = []
         
         for obj in get_typeform_answers(self.api_key, typeform_id, self.complete):
@@ -129,12 +139,10 @@ class TypeformX:
                     cv_link = obj[key]
                 
             try:
-                extracted_text = ' '.join(TextBlob(extract_text(download_file(cv_link)).decode('unicode-escape').encode('ascii', 'ignore')).words)
+                extracted_text = extract_file_text(cv_link)
                 extracted_data.append([email, cv_link, extracted_text])
             except AttributeError:
                 print "No file upload url found... Encountered NoneType"
-            except UnicodeDecodeError:
-                print "Could not decode text from file"
             except UnboundLocalError:
                 print "No fileupload field found"
                 
