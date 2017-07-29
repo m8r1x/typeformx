@@ -44,8 +44,8 @@ for i in range(len(all_forms)):
 
 ```
 ### Running tests
-The tests use the `nosetest` and `mock` packages.
-Open `typeform_test.py` and add your typeform API KEY then
+The tests use the `nosetest` and `mock` packages.<br/>
+Open `typeform_test.py` and add your typeform API KEY then<br/>
 To run the test script:
 `nosetests --verbosity=2`
 
@@ -54,6 +54,14 @@ To run the test script:
 * Constructor that takes in two arguments:
     * API_KEY (Compulsory type: `string`)
     * Complete (Optional type: `boolean`)
+    
+##### `write_to_csv([arr], FILENAME)`
+* Method that writes data to a `.csv` file.
+    * Takes two arguments :
+        * A **list/array** of data to write
+        * `String` argument denoting the **filename**
+        
+#### Instance methods
 ##### `get_all_forms(TYPEFORM_ID)`
 * Method that retrieves all the typeforms owned by a user.
     * Takes one `String` argument : `TYPEFORM_ID`
@@ -74,8 +82,3 @@ To run the test script:
 * Method that retrieves all emails, file upload urls and file text from a particular typeform.
     * Takes one `String` argument : `TYPEFORM_ID`
     * returns a multidimensional(**2D**) array/list of `strings`
-##### `write_to_csv([arr], FILENAME)`
-* Method that writes data to a `.csv` file.
-    * Takes two arguments :
-        * A **list/array** of data to write
-        * `String` argument denoting the **filename**
