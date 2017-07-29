@@ -45,6 +45,7 @@ for i in range(len(all_forms)):
 ```
 ### Running tests
 The tests use the `nosetest` and `mock` packages.
+Open `typeform_test.py` and add your typeform API KEY then
 To run the test script:
 `nosetests --verbosity=2`
 
