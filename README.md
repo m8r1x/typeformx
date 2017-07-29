@@ -40,7 +40,7 @@ for i in range(len(all_forms)):
     extracted_info = typeform.get_email_file_text(form['id'][i])
     filename = form['name'][i].replace(' ', '').replace('/', '').replace('\'', '') # this can be done using a 'clean_filename' function
     for extracted in extracted_info:
-        write_to_csv(extracted, filename)
+        write_to_csv(extracted, filename+'.csv')
 
 ```
 ### Running tests
