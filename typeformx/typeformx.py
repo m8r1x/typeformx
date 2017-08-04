@@ -66,8 +66,8 @@ def extract_file_text(url):
     except UnicodeDecodeError:
         print "Error while decoding text..."
 
-    words = TextBlob(extracted_text).words
-    return ' '.join(words)
+    sentences = [''.join(list(sentence)) for sentence in TextBlob(extracted_text).sentences]
+    return ' '.join(sentences)
     
 class TypeformX:
     def __init__(self, api_key, complete=False):
