@@ -8,15 +8,21 @@ from textract import process
 
 def get_form(api_key, typeform_id, complete=False):
     typeform_base_url = 'https://api.typeform.com/v1/form/'
+    # append the api key at the end of the url
     base_url = typeform_base_url +typeform_id + '?key=' +api_key
     
+    # check for the complete option and add it to the url 
+    # to get completed results only
     if complete:
         base_url += '&completed=true'
 
+    # return a json object / python dict
     return requests.get(base_url).json()
     
 def get_typeform_answers(api_key, typeform_id, complete):
+    # get the response field from the json results
     typeform_responses = get_form(api_key, typeform_id, complete)['responses']
+    # extract answers field from each response
     typeform_answers = [response['answers'] for response in typeform_responses]
         
     return typeform_answers
@@ -32,9 +38,9 @@ def write_to_csv(arr, csv_filename):
 def download_file(url):
     file_extensions = ['csv', 'doc', 'docx', 'eml', 'epub', 'gif', 'htm', 'html', 'jpeg', 'jpg', 'json', 'log', 'mp3', 'msg', 'odt', 'ogg', 'pdf', 'png', 'pptx', 'ps', 'psv', 'rtf', 'tff', 'tif', 'tiff', 'tsv', 'txt', 'wav', 'xls', 'xlsx']
     if url is not None:
-        filename = url.split('/')[-1]
-        filename = filename.split('?')[0]
-        extension = filename.split('.')[-1]
+        filename = url.split('/')[-1] # extract final part of url
+        filename = filename.split('?')[0] # remove query parameters
+        extension = filename.split('.')[-1] # extract extension
         
         if extension not in file_extensions:
             return None
@@ -66,6 +72,9 @@ def extract_file_text(url):
     except UnicodeDecodeError:
         print "Error while decoding text..."
 
+    # convert textblob's sentence SET list 
+    #       [Sentence('...'), Sentence('...'), ...]
+    # to normal python list
     sentences = [''.join(list(sentence)) for sentence in TextBlob(extracted_text).sentences]
     return ' '.join(sentences)
     
@@ -94,9 +103,11 @@ class TypeformX:
         return get_typeform_answers(self.api_key, typeform_id, self.complete)
         
     def get_form_fields(self, typeform_id):
+        # get the questions field from json response
         typeform_questions = get_form(self.api_key, typeform_id)['questions']
-        typeform_fields = set()
+        typeform_fields = set() # to capture each field only once
         
+        # check for multiple choice fields and tag them
         for question in typeform_questions:
             if question['id'].lower().startswith('list'):
                 question['question'] += '_multiple_choice'
@@ -141,9 +152,9 @@ class TypeformX:
             try:
                 extracted_text = extract_file_text(cv_link)
                 extracted_data.append([email, cv_link, extracted_text])
-            except AttributeError:
+            except AttributeError: # caused when text extraction function returns 'None'
                 print "No file upload url found... Encountered NoneType"
-            except UnboundLocalError:
+            except UnboundLocalError: # caused when typeform has no upload file fields
                 print "No fileupload field found"
                 
                 
