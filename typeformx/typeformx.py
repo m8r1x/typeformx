@@ -83,7 +83,7 @@ class TypeformX:
         self.api_key = api_key
         self.complete = complete
         
-    def get_all_forms(self):
+    def all_forms(self):
         base_url = 'https://api.typeform.com/v1/forms?key='
         base_url += self.api_key
         
@@ -99,10 +99,10 @@ class TypeformX:
             
         return typeform_frame
         
-    def get_form_answers(self, typeform_id):
+    def form_answers(self, typeform_id):
         return get_typeform_answers(self.api_key, typeform_id, self.complete)
         
-    def get_form_fields(self, typeform_id):
+    def form_fields(self, typeform_id):
         # get the questions field from json response
         typeform_questions = get_form(self.api_key, typeform_id)['questions']
         typeform_fields = set() # to capture each field only once
@@ -116,7 +116,7 @@ class TypeformX:
             
         return list(typeform_fields)
         
-    def get_form_emails(self, typeform_id):
+    def form_emails(self, typeform_id):
         emails = []
         for answers in get_typeform_answers(self.api_key, typeform_id, self.complete):
             for answer in answers.values():
@@ -126,7 +126,7 @@ class TypeformX:
                     
         return emails
         
-    def get_file_upload_urls(self, typeform_id):
+    def file_upload_urls(self, typeform_id):
         file_upload_links = []
         answers = get_typeform_answers(self.api_key, typeform_id, self.complete)
         
@@ -137,7 +137,7 @@ class TypeformX:
                     
         return file_upload_links
 
-    def get_email_file_text(self, typeform_id):
+    def file_upload_text(self, typeform_id):
         extracted_data = []
         
         for obj in get_typeform_answers(self.api_key, typeform_id, self.complete):
@@ -163,7 +163,7 @@ class TypeformX:
 def main():
     api_key = input('Enter API_KEY: ')
     typeform = TypeformX(api_key)
-    typeform_df = typeform.get_all_forms()
+    typeform_df = typeform.all_forms()
     print('\n')
     print(typeform_df)
     
@@ -174,11 +174,11 @@ def main():
     form_id = int(input('\nEnter typeform id number from above list: '))
     
     if operation == 1:
-        fields = typeform.get_form_fields(typeform_df['id'][form_id])
+        fields = typeform.form_fields(typeform_df['id'][form_id])
         print('\n')
         print(fields)
     elif operation == 2:
-        answers = typeform.get_form_answers(typeform_df['id'][form_id])
+        answers = typeform.form_answers(typeform_df['id'][form_id])
         print('\n')
         print(answers)
 
