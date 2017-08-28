@@ -33,7 +33,7 @@ def write_to_csv(arr, csv_filename):
             csv_writer = csv.writer(csvfile)
             csv_writer.writerow(arr)
     except IOError:
-        print "Error! Could not write to file!"
+        print("Error! Could not write to file!")
         
 def download_file(url):
     file_extensions = ['csv', 'doc', 'docx', 'eml', 'epub', 'gif', 'htm', 'html', 'jpeg', 'jpg', 'json', 'log', 'mp3', 'msg', 'odt', 'ogg', 'pdf', 'png', 'pptx', 'ps', 'psv', 'rtf', 'tff', 'tif', 'tiff', 'tsv', 'txt', 'wav', 'xls', 'xlsx']
@@ -53,7 +53,7 @@ def download_file(url):
                     if chunk: # filter out keep-alive new chunks
                         f.write(chunk)
         except IOError:
-            print "Error! Download failed! Could not write to file!"
+            print("Error! Download failed! Could not write to file!")
             
         return filename
         
@@ -70,7 +70,7 @@ def extract_file_text(url):
     try:
         extracted_text = extract_text(file).decode('unicode-escape').encode('ascii', 'ignore')
     except UnicodeDecodeError:
-        print "Error while decoding text..."
+        print("Error while decoding text...")
 
     # convert textblob's sentence SET list 
     #       [Sentence('...'), Sentence('...'), ...]
@@ -153,34 +153,34 @@ class TypeformX:
                 extracted_text = extract_file_text(cv_link)
                 extracted_data.append([email, cv_link, extracted_text])
             except AttributeError: # caused when text extraction function returns 'None'
-                print "No file upload url found... Encountered NoneType"
+                print("No file upload url found... Encountered NoneType")
             except UnboundLocalError: # caused when typeform has no upload file fields
-                print "No fileupload field found"
+                print("No fileupload field found")
                 
                 
         return extracted_data
         
 def main():
-    api_key = raw_input('Enter API_KEY: ')
+    api_key = input('Enter API_KEY: ')
     typeform = TypeformX(api_key)
     typeform_df = typeform.get_all_forms()
-    print '\n'
-    print typeform_df
+    print('\n')
+    print(typeform_df)
     
-    operation = int(raw_input('\nEnter Operation\n0. Exit\n1. Get Form Fields\n2. Get Form Answers\n\nOperation: '))
+    operation = int(input('\nEnter Operation\n0. Exit\n1. Get Form Fields\n2. Get Form Answers\n\nOperation: '))
     if operation == 0:
         exit()
     
-    form_id = int(raw_input('\nEnter typeform id number from above list: '))
+    form_id = int(input('\nEnter typeform id number from above list: '))
     
     if operation == 1:
         fields = typeform.get_form_fields(typeform_df['id'][form_id])
-        print '\n'
-        print fields
+        print('\n')
+        print(fields)
     elif operation == 2:
         answers = typeform.get_form_answers(typeform_df['id'][form_id])
-        print '\n'
-        print answers
+        print('\n')
+        print(answers)
 
 if __name__ == '__main__':
     main()
