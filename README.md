@@ -1,3 +1,7 @@
+## DEPRECATED!
+This project is no longer maintained by the owner. The repository will also be deleted soon.
+See [pyteform](https://github.com/m8r1x/pyteform)
+
 # TypeformX
 A simple python script to extract typeform data from the typeform api.
 
